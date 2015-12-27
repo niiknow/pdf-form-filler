@@ -1,0 +1,30 @@
+﻿@model PdfFormFiller.Web.Models.FormFillerViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Web Client</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Fill out the dynamic form below.</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @foreach (var kpv in Model.Fields)
+        {
+          var name = (kpv.Value ?? kpv.Key);
+          @Html.Partial("_PdfFillerInput", name)
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <br /><br />
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}

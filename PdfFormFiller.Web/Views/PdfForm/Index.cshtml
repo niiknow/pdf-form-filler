@@ -1,0 +1,28 @@
+﻿@model PdfFormFiller.Web.Models.FormFillerViewModel
+
+@{
+  ViewBag.Title = "";
+  var i = 0;
+}
+
+<h2>Fields</h2>
+
+@using (Html.BeginForm())
+{
+  @Html.AntiForgeryToken()
+
+  <div class="form-horizontal">
+    <h4>Filler a</h4>
+    <hr />
+    @foreach (var kpv in Model.Fields)
+    {            
+        @(i++ + ". ")
+        @Html.Raw(kpv.Key)  
+      <br />
+    }
+  </div>
+}
+
+<div>
+  @Html.ActionLink("Back to List", "Index")
+</div>
