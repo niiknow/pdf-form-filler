@@ -5,9 +5,15 @@ using PdfFormFiller.Web.Controllers;
 
 namespace PdfFormFiller.Web.Tests.Controllers
 {
+  /// <summary>
+  /// Home Controller tests container.
+  /// </summary>
   [TestClass]
   public class HomeControllerTest
   {
+    /// <summary>
+    /// Indexes this instance.
+    /// </summary>
     [TestMethod]
     public void Index()
     {

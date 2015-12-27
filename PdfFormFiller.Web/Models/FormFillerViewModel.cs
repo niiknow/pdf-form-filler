@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PdfFormFiller.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,7 +17,7 @@ namespace PdfFormFiller.Web.Models
     /// <value>
     /// The fields.
     /// </value>
-    public IDictionary<string, string> Fields { get; set; }
+    public IDictionary<string, PdfField> Fields { get; set; }
 
     /// <summary>
     /// Gets or sets the fields json.

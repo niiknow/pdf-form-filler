@@ -46,7 +46,7 @@ namespace PdfFormFiller.Web.Controllers
         throw new HttpException("The query string 'url' parameter is required.");
       }
                                                             
-      var fields = this.pdfService.GetFormFieldNames(this.pdfService.DownloadUrl(url));
+      var fields = this.pdfService.GetFormFields(this.pdfService.DownloadUrl(url));
       var model = new PdfFormFiller.Web.Models.FormFillerViewModel()
       {
         Fields = fields
@@ -69,17 +69,15 @@ namespace PdfFormFiller.Web.Controllers
       }
       var inStream1 = this.pdfService.DownloadUrl(url);
       var fields = this.pdfService.GetFormFields(inStream1);
-      var data = new SortedDictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-      var myFields = new SortedDictionary<string, string>(StringComparer.InvariantCultureIgnoreCase); 
+      var data = new SortedDictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);         
       foreach(var f in fields)
       {
-        data.Add(f.Key, ((PdfFieldTypeEnum)f.Value.FieldTypeId).ToString());
-        myFields.Add(f.Key, f.Value.OriginalName);
+        data.Add(f.Key, ((PdfFieldTypeEnum)f.Value.FieldTypeId).ToString());      
       }
 
       var model = new PdfFormFiller.Web.Models.FormFillerViewModel()
       {
-        Fields = myFields,
+        Fields = fields,
         FieldsJson = JsonConvert.SerializeObject(data, Formatting.Indented)
       };
 
@@ -99,7 +97,7 @@ namespace PdfFormFiller.Web.Controllers
         throw new HttpException("The query string 'url' parameter is required.");
       }
   
-      var result = this.pdfService.Fill(this.pdfService.DownloadUrl(url), formData);
+      var result = this.pdfService.FillForm(this.pdfService.DownloadUrl(url), formData);
       var fileName = System.IO.Path.GetFileName(url);
       var response = this.Response;
       var cd = new System.Net.Mime.ContentDisposition

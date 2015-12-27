@@ -15,9 +15,8 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @foreach (var kpv in Model.Fields)
-        {
-          var name = (kpv.Value ?? kpv.Key);
-          @Html.Partial("_PdfFillerInput", name)
+        {                                                    
+          @Html.Partial("_PdfFillerInput", kpv.Key)
         }
 
         <div class="form-group">
