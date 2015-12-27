@@ -64,6 +64,9 @@ namespace PdfFormFiller.Common.Tests
       Assert.AreEqual(0, string.CompareOrdinal(fields["topmostSubform[0].Page1[0].Address[0].f1_7[0]"].Value, fieldsToFill["topmostSubform[0].Page1[0].Address[0].f1_7[0]"]));
     }
 
+    /// <summary>
+    /// Generates the file test.
+    /// </summary>
     [TestMethod]
     public void GenerateFileTest()
     {

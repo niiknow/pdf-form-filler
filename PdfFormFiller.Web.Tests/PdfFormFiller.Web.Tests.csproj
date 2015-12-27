@@ -116,6 +116,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PdfFormFiller.Common\PdfFormFiller.Common.csproj">
+      <Project>{6b4275c1-8c21-4f3d-b90a-4ebcfb1a9731}</Project>
+      <Name>PdfFormFiller.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PdfFormFiller.Web\PdfFormFiller.Web.csproj">
       <Project>{0F15A0EA-139A-4A85-8C4E-0A6F20E8B891}</Project>
       <Name>PdfFormFiller.Web</Name>

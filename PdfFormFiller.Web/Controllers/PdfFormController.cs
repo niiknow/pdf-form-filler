@@ -31,30 +31,7 @@ namespace PdfFormFiller.Web.Controllers
     {
       this.pdfService = pdfService;
     }
-
-    /// <summary>
-    /// Indexes the specified URL.
-    /// </summary>
-    /// <param name="url">The URL.</param>
-    /// <returns></returns>
-    /// <exception cref="System.Web.HttpException">The query string 'url' parameter is required.</exception>
-    [HttpGet]
-    public ActionResult Index(string url)
-    {
-      if (string.IsNullOrWhiteSpace(url))
-      {                                                          
-        throw new HttpException("The query string 'url' parameter is required.");
-      }
-                                                            
-      var fields = this.pdfService.GetFormFields(this.pdfService.DownloadUrl(url));
-      var model = new PdfFormFiller.Web.Models.FormFillerViewModel()
-      {
-        Fields = fields
-      };
-
-      return View(model);
-    }
-
+        
     /// <summary>
     /// Fills the specified URL.
     /// </summary>
@@ -81,7 +58,7 @@ namespace PdfFormFiller.Web.Controllers
         FieldsJson = JsonConvert.SerializeObject(data, Formatting.Indented)
       };
 
-      return View(model);
+      return this.View(model);
     }
 
     /// <summary>
@@ -105,8 +82,8 @@ namespace PdfFormFiller.Web.Controllers
         FileName = fileName,                       
         Inline = true,
       };
-      response.AppendHeader("Content-Disposition", cd.ToString());
-                                    
+
+      response.AppendHeader("Content-Disposition", cd.ToString());  
       response.ContentType = "application/pdf";
       response.BinaryWrite(result);
       response.End();    
