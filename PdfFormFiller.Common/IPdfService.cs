@@ -29,6 +29,13 @@ namespace PdfFormFiller.Common
     IDictionary<string, string> GetFormFieldNames(Stream inStream);
 
     /// <summary>
+    /// Gets the form fields.
+    /// </summary>
+    /// <param name="inStream">The in stream.</param>
+    /// <returns></returns>
+    IDictionary<string, PdfField> GetFormFields(Stream inStream);
+
+    /// <summary>
     /// Gets the value.
     /// </summary>
     /// <param name="item">The item.</param>  

@@ -67,17 +67,19 @@ namespace PdfFormFiller.Web.Controllers
       {
         throw new HttpException("The query string 'url' parameter is required.");
       }
-                                                             
-      var fields = this.pdfService.GetFormFieldNames(this.pdfService.DownloadUrl(url));
+      var inStream1 = this.pdfService.DownloadUrl(url);
+      var fields = this.pdfService.GetFormFields(inStream1);
       var data = new SortedDictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+      var myFields = new SortedDictionary<string, string>(StringComparer.InvariantCultureIgnoreCase); 
       foreach(var f in fields)
       {
-        data.Add(f.Key, "string");
+        data.Add(f.Key, ((PdfFieldTypeEnum)f.Value.FieldTypeId).ToString());
+        myFields.Add(f.Key, f.Value.OriginalName);
       }
 
       var model = new PdfFormFiller.Web.Models.FormFillerViewModel()
       {
-        Fields = fields,
+        Fields = myFields,
         FieldsJson = JsonConvert.SerializeObject(data, Formatting.Indented)
       };
 

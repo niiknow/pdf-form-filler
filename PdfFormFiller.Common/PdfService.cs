@@ -91,6 +91,43 @@ namespace PdfFormFiller.Common
     }
 
     /// <summary>
+    /// Gets the form fields.
+    /// </summary>
+    /// <param name="inStream">The in stream.</param>
+    /// <returns></returns>
+    public IDictionary<string, PdfField> GetFormFields(Stream inStream)
+    {
+      var reader = new PdfReader(inStream);
+      var form = reader.AcroFields;
+      var keys = new List<string>();
+      foreach (var f in form.Fields.Keys)
+      {
+        keys.Add(f.ToString());
+      }
+
+      var result = keys
+        .GroupBy(x => x, StringComparer.InvariantCultureIgnoreCase)
+        .ToDictionary(x => x.Key, x =>
+        {
+          var f = form.GetField(x.Key);
+          string name = null;
+          if (!string.IsNullOrWhiteSpace(f) && f != x.Key)
+          {
+            name = f;
+          }
+          return new PdfField()
+          {
+            Name = x.Key,
+            OriginalName = name,
+            FieldTypeId = form.GetFieldType(x.Key),
+            Value = this.GetValue(form.GetFieldItem(x.Key))
+          };
+        }, StringComparer.InvariantCultureIgnoreCase);
+      reader.Close();
+      return new SortedDictionary<string, PdfField>(result, StringComparer.InvariantCultureIgnoreCase);
+    }
+
+    /// <summary>
     /// Gets the value.
     /// </summary>
     /// <param name="item">The item.</param>

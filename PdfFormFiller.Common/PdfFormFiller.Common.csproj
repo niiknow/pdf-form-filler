@@ -55,6 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IPdfService.cs" />
+    <Compile Include="PdfField.cs" />
+    <Compile Include="PdfFieldTypeEnum.cs" />
     <Compile Include="PdfService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
