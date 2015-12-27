@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 
 namespace PdfFormFiller.Common
 {
@@ -118,6 +119,45 @@ namespace PdfFormFiller.Common
       // the export value, again with a leading '/', so remove it!
       var curVal = valueDict.GetAsName(PdfName.AS);                             
       return (curVal != null) ? curVal.ToString().Substring(1) : string.Empty;
-    }  
+    }
+
+    /// <summary>
+    /// Downloads the PDF.
+    /// </summary>
+    /// <param name="url">The URL.</param>
+    /// <returns></returns>
+    /// <exception cref="ApplicationException">The URL was not a valid, absolute URI:  + url</exception>
+    public Stream DownloadUrl(string url)
+    {
+      Uri pdfUrl;
+      System.IO.Stream result = null;
+      if (Uri.TryCreate(url, UriKind.Absolute, out pdfUrl))
+      {
+        using (var httpClient = new HttpClient())
+        {
+          var GetAsynctask = httpClient.GetAsync(pdfUrl, HttpCompletionOption.ResponseHeadersRead);
+          var response = GetAsynctask.ConfigureAwait(false).GetAwaiter().GetResult();
+          if (response.IsSuccessStatusCode)
+          {
+            if (response.Content != null)
+            {
+              var readAsStreamTask = response.Content.ReadAsStreamAsync();
+              result = readAsStreamTask.ConfigureAwait(false).GetAwaiter().GetResult();
+            }
+          }
+        }
+      }
+
+      if (result == null)
+      {
+
+        if (!Uri.TryCreate(url, UriKind.Absolute, out pdfUrl))
+        {
+          throw new ApplicationException("The URL was not a valid, absolute URI: " + url);
+        }
+
+      }
+      return result;
+    }
   }
 }

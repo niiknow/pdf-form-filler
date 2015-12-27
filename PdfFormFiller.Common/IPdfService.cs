@@ -40,5 +40,12 @@ namespace PdfFormFiller.Common
     /// <param name="jsonFile">The json file.</param>
     /// <param name="outFile">The out file.</param>
     void GenerateFile(string inFile, string jsonFile, string outFile = null);
+
+    /// <summary>
+    /// Downloads the URL.
+    /// </summary>
+    /// <param name="url">The URL.</param>
+    /// <returns></returns>
+    Stream DownloadUrl(string url);
   }
 }
