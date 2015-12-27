@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PdfFormFiller.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,10 +19,25 @@ namespace PdfFormFiller.Web.Controllers
   public class PdfFormController : Controller
   {
     /// <summary>
+    /// The PDF service
+    /// </summary>
+    private readonly IPdfService pdfService;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PdfFormController"/> class.
+    /// </summary>
+    /// <param name="pdfService">The PDF service.</param>
+    public PdfFormController(IPdfService pdfService)
+    {
+      this.pdfService = pdfService;
+    }
+
+    /// <summary>
     /// Indexes the specified URL.
     /// </summary>
     /// <param name="url">The URL.</param>
     /// <returns></returns>
+    /// <exception cref="System.Web.HttpException">The query string 'url' parameter is required.</exception>
     [HttpGet]
     public ActionResult Index(string url)
     {
@@ -29,9 +45,8 @@ namespace PdfFormFiller.Web.Controllers
       {                                                          
         throw new HttpException("The query string 'url' parameter is required.");
       }
-
-      var filler = new PdfFormFiller.Common.PdfService();
-      var fields = filler.GetFormFieldNames(filler.DownloadUrl(url));
+                                                            
+      var fields = this.pdfService.GetFormFieldNames(this.pdfService.DownloadUrl(url));
       var model = new PdfFormFiller.Web.Models.FormFillerViewModel()
       {
         Fields = fields
@@ -52,9 +67,8 @@ namespace PdfFormFiller.Web.Controllers
       {
         throw new HttpException("The query string 'url' parameter is required.");
       }
-
-      var filler = new PdfFormFiller.Common.PdfService();
-      var fields = filler.GetFormFieldNames(filler.DownloadUrl(url));
+                                                             
+      var fields = this.pdfService.GetFormFieldNames(this.pdfService.DownloadUrl(url));
       var data = new SortedDictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
       foreach(var f in fields)
       {
@@ -82,9 +96,8 @@ namespace PdfFormFiller.Web.Controllers
       {
         throw new HttpException("The query string 'url' parameter is required.");
       }
-
-      var filler = new PdfFormFiller.Common.PdfService();   
-      var result = filler.Fill(filler.DownloadUrl(url), formData);
+  
+      var result = this.pdfService.Fill(this.pdfService.DownloadUrl(url), formData);
       var fileName = System.IO.Path.GetFileName(url);
       var response = this.Response;
       var cd = new System.Net.Mime.ContentDisposition
