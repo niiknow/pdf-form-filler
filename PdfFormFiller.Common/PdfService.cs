@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 
 namespace PdfFormFiller.Common
 {
@@ -94,35 +95,19 @@ namespace PdfFormFiller.Common
     [ExcludeFromCodeCoverage]
     public Stream DownloadUrl(string url)
     {
-      Uri pdfUrl;
-      System.IO.Stream result = null;
+      Uri pdfUrl;                     
       if (Uri.TryCreate(url, UriKind.Absolute, out pdfUrl))
       {
-        using (var httpClient = new HttpClient())
+        byte[] data;
+        using (var wc = new WebClient())
         {
-          var GetAsynctask = httpClient.GetAsync(pdfUrl, HttpCompletionOption.ResponseHeadersRead);
-          var response = GetAsynctask.ConfigureAwait(false).GetAwaiter().GetResult();
-          if (response.IsSuccessStatusCode)
-          {
-            if (response.Content != null)
-            {
-              var readAsStreamTask = response.Content.ReadAsStreamAsync();
-              result = readAsStreamTask.ConfigureAwait(false).GetAwaiter().GetResult();
-            }
-          }
-        }
+          data = wc.DownloadData(url); 
+        }       
+                                
+        return new MemoryStream(data);
       }
 
-      if (result == null)
-      {
-
-        if (!Uri.TryCreate(url, UriKind.Absolute, out pdfUrl))
-        {
-          throw new ApplicationException("The URL was not a valid, absolute URI: " + url);
-        }
-
-      }
-      return result;
+      throw new ApplicationException("The URL was not a valid, absolute URI: " + url);
     }
   }
 }

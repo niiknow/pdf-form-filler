@@ -47,15 +47,10 @@ namespace PdfFormFiller.Common.Tests
       using (var pdfStream = Assembly.GetAssembly(typeof(PdfService)).GetManifestResourceStream("PdfFormFiller.Common.Resources.fw9.pdf"))
       {
         var filler = new PdfService();
-                                  
-        using (var os = new MemoryStream())
-        {
-          var result = filler.FillForm(pdfStream, fieldsToFill);       
-          os.Write(result, 0, result.Length);
-          os.Seek(0, SeekOrigin.Begin);
-                                        
-          fields = filler.GetFormFields(os);
-        }
+
+        var result = filler.FillForm(pdfStream, fieldsToFill);
+        var os = new MemoryStream(result);
+        fields = filler.GetFormFields(os);
       }
 
       Assert.IsNotNull(fields);
