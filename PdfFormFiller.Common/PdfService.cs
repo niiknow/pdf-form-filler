@@ -22,7 +22,7 @@ namespace PdfFormFiller.Common
     /// <param name="inStream">The in stream.</param>
     /// <param name="fields">The fields.</param>
     /// <returns></returns>
-    public byte[] FillForm(Stream inStream, IDictionary<string, string> fields)
+    public MemoryStream FillForm(Stream inStream, IDictionary<string, string> fields)
     {
       var outStream = new MemoryStream();
       var fieldsToFill = fields.ToDictionary(k => k.Key.Replace("$", "."), k => k.Value);
@@ -36,7 +36,7 @@ namespace PdfFormFiller.Common
                                         
       stamper.Close();
       reader.Close();
-      return outStream.ToArray();
+      return outStream;
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ namespace PdfFormFiller.Common
       using (var inStream = new FileStream(inFile, FileMode.Open))
       {
         var result = this.FillForm(inStream, data);
-        System.IO.File.WriteAllBytes(outFile, result);
+        System.IO.File.WriteAllBytes(outFile, result.ToArray());
       }
     }                              
 
@@ -79,7 +79,8 @@ namespace PdfFormFiller.Common
           {
             Name = x.Key,           
             FieldTypeId = form.GetFieldType(x.Key),
-            Value = form.GetField(x.Key)
+            Value = form.GetField(x.Key) ,
+            AppearanceStates = form.GetAppearanceStates(x.Key)
           };
         }, StringComparer.InvariantCultureIgnoreCase);
       reader.Close();
@@ -93,7 +94,7 @@ namespace PdfFormFiller.Common
     /// <returns></returns>
     /// <exception cref="ApplicationException">The URL was not a valid, absolute URI:  + url</exception>    
     [ExcludeFromCodeCoverage]
-    public Stream DownloadUrl(string url)
+    public MemoryStream DownloadUrl(string url)
     {
       Uri pdfUrl;                     
       if (Uri.TryCreate(url, UriKind.Absolute, out pdfUrl))

@@ -62,12 +62,11 @@ namespace PdfFormFiller.Web.Tests.Controllers
     /// </summary>
     [TestMethod]
     public void TestFillPostDictionaryReturnResultPdf()
-    {
-      byte[] data = new byte[1];
+    {                                                                                                                           
       IDictionary<string, PdfField> myList = new Dictionary<string, PdfField>();
       var pdfService = new Mock<IPdfService>();
       pdfService.Setup(p => p.DownloadUrl(It.IsAny<string>())).Returns(new MemoryStream());
-      pdfService.Setup(p => p.FillForm(It.IsAny<Stream>(), It.IsAny<IDictionary<string, string>>())).Returns(data);
+      pdfService.Setup(p => p.FillForm(It.IsAny<Stream>(), It.IsAny<IDictionary<string, string>>())).Returns(new MemoryStream());
                                                                                                                  
       using (var controller = new PdfFormController(pdfService.Object))
       {
@@ -106,12 +105,11 @@ namespace PdfFormFiller.Web.Tests.Controllers
 
       var text = JsonConvert.SerializeObject(dummyItem);
       JObject param = JObject.Parse(text);
-
-      byte[] data = new byte[1];
+                                                                                                                                
       IDictionary<string, PdfField> myList = new Dictionary<string, PdfField>();
       var pdfService = new Mock<IPdfService>();
       pdfService.Setup(p => p.DownloadUrl(It.IsAny<string>())).Returns(new MemoryStream());
-      pdfService.Setup(p => p.FillForm(It.IsAny<Stream>(), It.IsAny<IDictionary<string, string>>())).Returns(data);
+      pdfService.Setup(p => p.FillForm(It.IsAny<Stream>(), It.IsAny<IDictionary<string, string>>())).Returns(new MemoryStream());
 
       using (var controller = new PdfFormController(pdfService.Object))
       {

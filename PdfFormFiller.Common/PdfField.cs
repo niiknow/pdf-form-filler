@@ -34,5 +34,13 @@ namespace PdfFormFiller.Common
     /// The value.
     /// </value>
     public string Value { get; set; }
+
+    /// <summary>
+    /// Gets or sets the choices.
+    /// </summary>
+    /// <value>
+    /// The choices.
+    /// </value>
+    public string[] AppearanceStates { get; set; }
   }
 }

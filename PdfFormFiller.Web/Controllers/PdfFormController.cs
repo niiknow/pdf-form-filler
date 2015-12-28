@@ -49,7 +49,12 @@ namespace PdfFormFiller.Web.Controllers
       var data = new SortedDictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);         
       foreach(var f in fields)
       {
-        data.Add(f.Key, ((PdfFieldTypeEnum)f.Value.FieldTypeId).ToString());      
+        var typeName = ((PdfFieldTypeEnum)f.Value.FieldTypeId).ToString();
+        if(f.Value.AppearanceStates != null && f.Value.AppearanceStates.Length > 0)
+        {
+          typeName = string.Format("{0}:{1}", typeName, JsonConvert.SerializeObject(f.Value.AppearanceStates));
+        }
+        data.Add(f.Key, typeName);      
       }
 
       var model = new PdfFormFiller.Web.Models.FormFillerViewModel()
@@ -85,7 +90,7 @@ namespace PdfFormFiller.Web.Controllers
 
       response.AppendHeader("Content-Disposition", cd.ToString());  
       response.ContentType = "application/pdf";
-      response.BinaryWrite(result);
+      response.BinaryWrite(result.ToArray());
       response.End();    
     }
 

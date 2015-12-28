@@ -48,9 +48,8 @@ namespace PdfFormFiller.Common.Tests
       {
         var filler = new PdfService();
 
-        var result = filler.FillForm(pdfStream, fieldsToFill);
-        var os = new MemoryStream(result);
-        fields = filler.GetFormFields(os);
+        var result = filler.FillForm(pdfStream, fieldsToFill);     
+        fields = filler.GetFormFields(result);
       }
 
       Assert.IsNotNull(fields);

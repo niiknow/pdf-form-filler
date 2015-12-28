@@ -20,7 +20,7 @@ namespace PdfFormFiller.Common
     /// <param name="inStream">The in stream.</param>
     /// <param name="fields">The fields.</param>
     /// <returns></returns>
-    byte[] FillForm(Stream inStream, IDictionary<string, string> fields);
+    MemoryStream FillForm(Stream inStream, IDictionary<string, string> fields);
                                                                          
     /// <summary>
     /// Gets the form fields.
@@ -43,6 +43,6 @@ namespace PdfFormFiller.Common
     /// <param name="url">The URL.</param>
     /// <returns></returns>
     [ExcludeFromCodeCoverage]
-    Stream DownloadUrl(string url);
+    MemoryStream DownloadUrl(string url);
   }
 }
